@@ -21,8 +21,7 @@ RUN chown -R nginx:nginx /app && \
 RUN touch /var/run/nginx.pid && \
         chown -R nginx:nginx /var/run/nginx.pid 
         
-COPY ./docker/linux/arm32v7/api-proxy-module .
-COPY ./docker/linux/arm32v7/templates .
+COPY ./docker/linux/arm32v7/build .
 
 USER nginx  
 

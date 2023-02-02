@@ -21,8 +21,8 @@ RUN chown -R nginx:nginx /app && \
 RUN touch /var/run/nginx.pid && \
         chown -R nginx:nginx /var/run/nginx.pid 
 
-COPY ./docker/linux/arm64v8/api-proxy-module .
-COPY ./docker/linux/arm64v8/templates .
+COPY ./docker/linux/arm64v8/build/api-proxy-module .
+COPY ./docker/linux/arm64v8/build/templates .
 
 USER nginx  
 

@@ -88,24 +88,24 @@ echo ${PROJECT_ROOT}
 
 if [[ "$ARCH" == "amd64" ]]; then
 set +e
-docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src ekidd/rust-musl-builder cargo build --release --manifest-path /home/rust/src/edge-modules/api-proxy-module/Cargo.toml
+docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src ekidd/rust-musl-builder /bin/bash -c "sudo chown -R rust:rust /opt/rust;rustup target add x86_64-unknown-linux-musl;cargo build --release --manifest-path /home/rust/src/edge-modules/api-proxy-module/Cargo.toml"
 set -e
 
-cp -r ./templates/ ./docker/linux/amd64
-cp -r ./target/x86_64-unknown-linux-musl/release/api-proxy-module ./docker/linux/amd64
+cp -r ./templates/ ./docker/linux/amd64/build
+cp ./target/x86_64-unknown-linux-musl/release/api-proxy-module ./docker/linux/amd64/build
 docker build . -t  azureiotedge-api-proxy -f docker/linux/amd64/Dockerfile
 elif [[ "$ARCH" == "arm32v7" ]]; then
 
 docker run --rm -it -v "${PROJECT_ROOT}":/home/rust/src messense/rust-musl-cross:armv7-musleabihf  /bin/bash -c " rm -frv ~/.rustup/toolchains/* &&curl -sSLf https://sh.rustup.rs | sh -s -- -y && rustup target add armv7-unknown-linux-musleabihf && cargo build --target=armv7-unknown-linux-musleabihf --release --manifest-path /home/rust/src/edge-modules/api-proxy-module/Cargo.toml"
-cp -r ./templates/ ./docker/linux/arm32v7
-cp -r ./target/armv7-unknown-linux-musleabihf/release/api-proxy-module ./docker/linux/arm32v7
+cp -r ./templates/ ./docker/linux/arm32v7/build
+cp ./target/armv7-unknown-linux-musleabihf/release/api-proxy-module ./docker/linux/arm32v7/build
 docker build . -t  azureiotedge-api-proxy -f docker/linux/arm32v7/Dockerfile
 elif [[ "$ARCH" == "aarch64" ]]; then
 set +e
 ../../scripts/linux/cross-platform-rust-build.sh --os alpine --arch $ARCH --build-path edge-modules/api-proxy-module
 set -e
 
-cp -r ./templates/ ./docker/linux/arm64v8
-cp -r ./target/aarch64-unknown-linux-gnu/release/api-proxy-module ./docker/linux/arm64v8
+cp -r ./templates/ ./docker/linux/arm64v8/build
+cp ./target/aarch64-unknown-linux-gnu/release/api-proxy-module ./docker/linux/arm64v8/build
 docker build . -t  azureiotedge-api-proxy -f docker/linux/arm64v8/Dockerfile
 fi
