@@ -16,8 +16,7 @@ RUN adduser -Ds /bin/sh -u ${NGINXUSER_ID} nginx
 
 RUN chown -R nginx:nginx /app   
 
-COPY ./docker/linux/amd64/api-proxy-module .
-COPY ./docker/linux/amd64/templates .
+COPY ./docker/linux/amd64/build .
 
 RUN	apk update && \
     apk add --no-cache nginx && \
